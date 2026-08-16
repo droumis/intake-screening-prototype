@@ -94,4 +94,4 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for diagrams, [IMPLEMENTATION.md](IMPLEME
 
 ## License
 
-BSD 3-Clause. See [LICENSE](LICENSE), including the additional notice on intended use.
+BSD 3-Clause, in [LICENSE](LICENSE). [NOTICE.md](NOTICE.md) records the intended use: a research prototype, not for any real screening decision.

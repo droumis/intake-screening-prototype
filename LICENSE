@@ -27,18 +27,3 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
----
-
-ADDITIONAL NOTICE
-
-This software is a research prototype. It is not a medical device, not clinical
-decision support, and not a source of medical or legal advice. It has not been
-validated, audited, or reviewed by any clinical, regulatory, or legal authority.
-It must not be used to make or inform any real eligibility, screening, hiring,
-admission, or clinical decision about any person.
-
-The screening criteria documents in demo-data/ are fabricated examples that
-paraphrase publicly available regulations. They are not legal advice and do not
-reflect the current text of any rule. The organizations and applicants described
-in demo-data/ and tests/fixtures/ are invented.
