@@ -1,0 +1,12 @@
+[model]
+provider = "ollama"
+model = "qwen3:30b-a3b"          # ~19 GB; fits Apple Silicon 32 GB unified memory
+# fallback: "qwen3:14b" for 16 GB machines; "gemma3:12b" as another option
+temperature = 0.1
+num_ctx = 16384                   # do not raise without revisiting memory budget
+max_retries = 1
+base_url = "http://localhost:11434"
+
+[app]
+data_dir = "demo-data"
+db_path = "pisa.db"
