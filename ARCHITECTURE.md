@@ -117,7 +117,7 @@ flowchart TD
     subgraph CHECKS["Detection Checks (per criterion)"]
         CL["Checklist Fields<br/>Checked conditions"]
         MED["Medication Names<br/>+ Drug Class Expansion<br/>(DRUG_CLASS_MAP)"]
-        KW["Keyword Search<br/>+ Word Boundary Matching<br/>+ Negation Detection<br/>+ Multi-keyword Threshold"]
+        KW["Keyword Search<br/>+ Word Boundary Matching<br/>+ Negation Detection<br/>+ Whole-form rescan<br/>(hard criteria only)"]
     end
 
     subgraph RESOLVE["Section Resolution"]

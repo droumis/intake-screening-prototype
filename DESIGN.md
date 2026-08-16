@@ -82,7 +82,7 @@ A cross-section analysis that receives candidate flags from three sources: rules
 Its temperature is the highest (0.3) because its task is the most associative: comparing flags, detecting redundancy, proposing merges.
 
 ### Layer 5: Merge and deduplicate
-Rule flags survive untouched. Model flags are deduplicated against each other and merged into rule flags where they share criterion references. The conservatism principle: highest severity always wins.
+Model output can add to a rule flag but cannot delete it or soften it. Model flags are deduplicated against each other and merged into rule flags where they share criterion references, so a rule flag can gain evidence and follow-up questions from a model flag while keeping its own level, basis and citation. One comparator orders every consolidation path: a hard flag outranks any soft flag, then level, then severity. When one rule flag subsumes another, the weaker one is folded into the survivor with its criterion recorded in the history rather than dropped.
 
 The model catches what explicit keyword matching cannot: reframing, implication, cross-section patterns. It is never the sole authority on a safety-critical match. The human reviewer sees both layers, knows which flags are deterministic and which are inferred, and makes the final call.
 

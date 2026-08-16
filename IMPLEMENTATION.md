@@ -177,7 +177,7 @@ Fully deterministic, matching the design's Step 1. Iterates `hard_criteria` and 
 2. Medication name matching (across all sections)
 3. Keyword matching in relevant sections with negation detection
 4. **Question-keyword matching** for regulatory screening Q/A tables: when a keyword appears in the question text and the answer is affirmative ("Yes..."), the match fires
-5. **Window check notes**: when a matched answer contains a relative-time phrase ("three weeks ago", "in 2017"), the flag gets a `window_check` annotation prompting date-arithmetic verification
+5. **Window check notes**: when a matched answer contains a relative-time phrase ("three weeks ago", "in 2017"), the flag's rationale notes that the window needs verifying. This is written into the rationale rather than a separate field, because the rationale is what the flag card renders and the database stores.
 
 Caution criteria respect `default_level`: if set to "red", the emitted flag has `level: "red"` but `hard_flag: false`, and inherits `resolution_pathway` into `resolution_criteria`.
 
@@ -189,7 +189,9 @@ Additional rules engine behaviors:
 
 - **Drug class expansion:** `DRUG_CLASS_MAP` maps class names (SSRIs, SNRIs, MAOIs, etc.) to individual drug names so the rules engine catches specific medications when the profile specifies a class
 - **Word-boundary matching:** Keywords ≤3 characters use regex word boundaries to prevent substring noise (e.g., "21" matching inside "2021")
-- **Multi-keyword threshold:** Criteria with 3+ keywords require 2+ distinct keyword matches unless a multi-word phrase or >10-char term matched (those are specific enough alone). Prevents a single generic word like "medication" from triggering irrelevant criteria.
+- **A single keyword match fires:** one distinct match is enough. Requiring two produced false negatives on exclusionary criteria, so a match on one general single-word keyword now flags with a caveat in the rationale instead of being suppressed.
+- **All matching evidence is kept, ordered most-specific first** (multi-word phrases, then longer keywords). Filtering evidence by keyword length discarded the substantiating quote whenever a longer keyword matched somewhere irrelevant.
+- **Whole-form rescan for hard criteria:** a hard criterion that matches nothing in the sections it targets is retried against the rest of the form, and the rationale names where the match was found. Caution criteria keep the narrow scope.
 - **Section name resolution:** Profile-authored section names (e.g., "Intake Packet - Safety Screen") are resolved through the section map to taxonomy keys (e.g., "regulatory_screening") so criteria target names match the parser's keys.
 
 ---
@@ -235,7 +237,7 @@ Implemented with additional heuristics beyond the design:
 - **Proposed merges** from the synthesis pass are applied (primary keeps highest level/severity, unions evidence and follow-ups)
 - **Criterion-ref based merge for proposed merges** — the synthesis pass proposes merges by title, but the code now extracts criterion IDs from titles (e.g., "R-4" from "[R-4] Other psychotropic...") and matches against evidence `criterion_ref` fields. Falls back to fuzzy title matching only when no ref is found.
 - **Automatic criterion-ref consolidation** — after processing proposed merges, an `_auto_merge_by_criterion` pass groups ALL flags sharing the same `criterion_ref` and merges them into one flag (preferring rule-sourced as primary, keeping highest severity). This is model-independent and ensures that when multiple pipeline stages flag the same criterion, only one consolidated flag appears.
-- Conservatism enforced: highest level always wins; rule flags are never modified
+- Conservatism enforced by one comparator, `_strictness_key`: a hard flag outranks any soft flag, then level, then severity. Model output can add evidence and follow-ups to a rule flag, but cannot delete it, lower its level, or attach a resolution pathway to a hard flag.
 - **Atomic flag replacement on completion:** Intermediate flags shown during progress are replaced by the final deduplicated set via `replace_flags()` (DELETE + INSERT) to prevent stale duplicates accumulating across runs
 
 ### Step 6 — Persist
