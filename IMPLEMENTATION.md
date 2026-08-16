@@ -225,7 +225,7 @@ Sends the ENTIRE intake form + ALL criteria (hard + caution) + program demands +
 Purpose: catches cross-section patterns, medication-criterion connections, timeline/window checks, implicit concerns, and positive indicators that per-section analysis misses because it only sees one section at a time. Returns flags in the same schema as per-section analysis. The full form + all criteria is ~7k tokens, well within the 16k context window.
 
 ### Step 4 — Synthesis Pass
-One model call receiving all section summaries, all candidate flags from ALL THREE prior sources (rules engine, per-section model, AND comprehensive pass), and deferred/blank answers. Temperature: 0.3 (most liberal — its job is associative/creative: connecting flags, proposing merges).
+One model call receiving all section summaries, all candidate flags from ALL THREE prior sources (rules engine, per-section model, AND comprehensive pass), and deferred/blank answers. Temperature: 0.3 (most liberal, since its job is associative: connecting flags and proposing merges).
 
 ### Step 5 — Merge & Dedupe
 
@@ -334,7 +334,7 @@ The implementation uses **filesystem-based discovery**:
   - **Follow-up count indicator:** 💬 badge with count in header chips when a flag has linked follow-ups
   - **Inline follow-up history:** Collapsible "Follow-ups (N)" card nested within each flag body (11px header, max-height 200px scrollable), showing timestamp + note + response for each
   - **Per-flag inline actions:**
-    - Follow-up button → drawer with suggested questions, reviewer note, applicant response, level selector (red/yellow/green, defaults to current level — no change if left unchanged). Updates flag card border color, header badge, and follow-up section in-place on save.
+    - Follow-up button → drawer with suggested questions, reviewer note, applicant response, level selector (red/yellow/green, defaulting to the current level, so leaving it alone changes nothing). Updates flag card border color, header badge, and follow-up section in-place on save.
     - Acknowledge button (green outlined, instant one-click) → collapses card, dims opacity, adds "acknowledged ✓" badge to header. No form required.
     - Level button → drawer with level picker (any level except current) and required reason field. Updates card border color in-place.
     - Reopen button (on acknowledged flags) → restores card to open state with full action buttons.
@@ -438,7 +438,7 @@ Matches design. Stored in `followups` table.
 
 ## Known Gaps
 
-Where the design's claims outrun what the code can actually promise. These are the honest limits of the prototype, not a backlog.
+Where the design's claims outrun what the code can promise. These are standing limits of the prototype rather than planned work.
 
 **Recall is bounded by the profile.** The rules engine can only match what the profile builder extracted into a `DetectionSpec`. If the model writing the profile omits a keyword or misses a medication brand name, the deterministic layer is silent and the only remaining coverage is the model passes. `DRUG_CLASS_MAP` expands common classes, but a form saying `Lithobid` or `Li carbonate` depends on that map having the alias. The layer bounds model variance; it does not bound misses.
 

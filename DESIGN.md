@@ -90,7 +90,7 @@ The model catches what explicit keyword matching cannot: reframing, implication,
 
 ---
 
-## Why the test forms and oracles exist
+## What the test forms and oracles are for
 
 Each program ships with carefully authored intake forms (the `applicant_*.md` files) and an `EXPECTED_FLAGS.md` oracle. These serve multiple purposes:
 
@@ -113,7 +113,7 @@ The calibration traps are authored in each oracle and parsed by the eval, but no
 
 ---
 
-## Why the regulatory vs. house distinction matters
+## Regulatory vs. house: law leaves no discretion, policy does
 
 Facilitators need to know whether a flag represents a legal obligation or a policy choice, because the response is different:
 
@@ -124,13 +124,13 @@ PISA carries `basis` (regulatory/house) and `citation` (rule reference) on every
 
 ---
 
-## Why screening criteria are structured as documents, not config
+## Criteria are documents rather than config
 
 The context documents (`screening_criteria.md`, `program_description.md`, `reference_material.md`) are authored in natural language rather than YAML or JSON, for four reasons:
 
 1. **Domain experts author them.** A clinical director writes criteria in prose with rule citations. They don't need to learn a schema.
 2. **Nuance survives.** "Not exclusionary by rule; see house criterion H-2 for this center's stricter handling" is easy to write in prose, awkward in structured config.
-3. **The extraction is the model's job.** The profile builder prompt instructs the LLM to read the documents and produce the structured profile. This leverages what models are good at (structured extraction from natural language) while the resulting profile is what the deterministic engine needs (explicit fields, keyword lists, section targets).
+3. **The extraction is the model's job.** The profile builder prompt instructs the LLM to read the documents and produce the structured profile. Structured extraction from prose is what models are good at, and the resulting profile is what the deterministic engine needs: explicit fields, keyword lists, section targets.
 4. **Iteration is fast.** Update the prose, rebuild the profile, re-run eval. No code changes, no schema migrations.
 
 The approval step is where a human verifies that the extraction was faithful. If the model misclassified a criterion, the reviewer catches it before any screening runs.
@@ -143,7 +143,7 @@ Each document gives the profile builder different information:
 
 - **`program_description`** defines what the program *demands* of participants: physical, psychological, dietary, environmental. These become program-demand cross-checks: a heart condition matters differently for a high-altitude expedition vs. a reclining session. Example: "Transient elevated heart rate and blood pressure; several hours without food; no option to end early."
 
-- **`reference_material`** provides clinical background and regulatory citations that give the model context for *why* criteria exist and how to weigh edge cases. Example: "Lithium + classical psychedelics: case literature associates the combination with seizures." This helps the model's section analysis distinguish "this medication is concerning because..." from "this medication is unremarkable."
+- **`reference_material`** provides clinical background and regulatory citations that give the model context for *why* criteria exist and how to weigh edge cases. The fabricated Oregon document, for instance, asserts a seizure risk for lithium combined with classical psychedelics; it is invented text written to give the model something to weigh, not a sourced clinical claim. This is what lets section analysis distinguish "this medication is concerning because..." from "this medication is unremarkable."
 
 Splitting them means a regulatory update (new rule) only requires editing `screening_criteria`; a program logistics change (new venue, longer sessions) only touches `program_description`; new clinical evidence goes into `reference_material`. The profile rebuilds from whatever combination is selected.
 

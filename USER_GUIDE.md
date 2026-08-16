@@ -96,7 +96,7 @@ Context documents are the plain-language source material that defines what the s
 |---|---|---|
 | `screening_criteria` | The authority — defines every criterion, its disposition, detection hints, and resolution pathway | "R-A1. Lithium within 30 days. A 'yes' means the client may not participate." |
 | `program_description` | What the program demands of participants — informs program-demand cross-checks | "A sustained non-ordinary state lasting several hours; transient elevated heart rate and blood pressure; several hours without food." |
-| `reference_material` | Clinical background and regulatory citations — gives the model context for why criteria exist | "Lithium + classical psychedelics: case literature associates the combination with seizures and severe adverse events." |
+| `reference_material` | Clinical background and regulatory citations, giving the model context for why criteria exist | An invented assertion of seizure risk for lithium combined with classical psychedelics. Demo text, not a sourced claim. |
 
 Splitting these out means you can update one without rebuilding everything: edit the criteria when rules change, update the program description when logistics change, or add reference material when new clinical guidance arrives.
 
@@ -370,7 +370,7 @@ Each flag is a collapsible card with a **4px colored left border** (red/amber/gr
 
 **Inside each card:**
 
-- **Chip row:** Level chip (RED/YELLOW/GREEN filled), HARD chip (if applicable), provenance chip (rule/model), **basis chip** (regulatory/house — regulatory is filled, house is outlined; tooltip shows the rule citation), status chip (if not open), section name chips. The basis chip only appears when the criterion carries a basis, so flags stored before `basis` and `citation` were persisted show no chip until the applicant is screened again.
+- **Chip row:** Level chip (RED/YELLOW/GREEN filled), HARD chip (if applicable), provenance chip (rule/model), **basis chip** (regulatory filled, house outlined, with the rule citation as its tooltip), status chip (if not open), section name chips. The basis chip only appears when the criterion carries a basis, so flags stored before `basis` and `citation` were persisted show no chip until the applicant is screened again.
 - **Rationale** — plain-language explanation of why this matters (shown first)
 - **Evidence** — verbatim quotes as styled blockquotes with criterion badges (`R-A1`, `H-3` in monospace chip) and section attribution
 - **Suggested lookup** — rendered as small neutral chips (e.g., "lithium + fasting interaction", "MAOI dietary restrictions")
@@ -411,7 +411,7 @@ Shows the history of follow-up interactions and a form for adding general notes.
 
 #### Existing Follow-ups
 
-Each card has an **informative header** showing the date, a preview of the reviewer note, and whether it resolved flags — e.g., `"2026-07-15 — Asked about lithium timeline... [resolved]"`. Expand to see:
+Each card has an **informative header** showing the date, a preview of the reviewer note, and whether it resolved flags, for example `"2026-07-15 — Asked about lithium timeline... [resolved]"`. Expand to see:
 - Reviewer note (what was asked)
 - Applicant response (what they said)
 - Linked flag titles
@@ -595,7 +595,7 @@ Pipeline produces mostly green flags (positive indicators) with perhaps minor ye
 | Partial results after failure | Some flags visible, run marked "incomplete" | Flags from completed sections are preserved; re-run for full analysis |
 | Applicant "not found" after purge | Error alert when selecting | Click Refresh to re-import from filesystem |
 | Stale profile after doc changes | Analysis uses old criteria | Rebuild profile in Setup (new hash won't match cached) |
-| Parse quality warning | Yellow "data_quality" flag after screening | Fewer than 3 sections were detected — the form may use an unrecognized format. Check that section headings use `## Title` or `**Title**` format |
+| Parse quality warning | Yellow "data_quality" flag after screening | Fewer than 3 sections were detected, so the form may use an unrecognized format. Check that section headings use `## Title` or `**Title**` format |
 | Applicant screens with no flags and 16s runtime | No flags appear, run marked complete | The parser found no content to analyze. Purge the record, verify the form format, click Refresh, and re-screen |
 
 ---
