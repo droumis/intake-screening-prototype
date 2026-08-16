@@ -103,10 +103,11 @@ Nina's psychosis history is answered "No" on the CIF but disclosed in narrative 
 
 ### Regression protection
 When you modify the rules engine, prompt templates, or parser, `pixi run eval` re-runs all datasets and checks:
-- 100% of expected reds are present (missing a red = build failure)
-- ≥80% of expected yellows are present
-- Zero flags on calibration traps
-- Cross-dataset assertions hold (lithium semantics differ by state)
+- every expected red is present; a missing red exits non-zero
+- at least 80% of expected yellows are present
+- the cross-dataset assertion holds: lithium comes out hard in the Oregon dataset and resolvable in the Colorado one
+
+The calibration traps are authored in each oracle and parsed by the eval, but nothing asserts on them yet, so over-flagging a trap does not currently fail a run. Checking them is left to a reader comparing the report against the oracle.
 
 ---
 

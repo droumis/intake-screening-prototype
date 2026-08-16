@@ -1,10 +1,16 @@
-"""Oracle evaluation script — runs the pipeline on both demo datasets and
-scores results against each EXPECTED_FLAGS.md.
+"""Oracle evaluation script.
+
+Runs the pipeline on every demo program and scores the results against that
+program's EXPECTED_FLAGS.md.
 
 Passing bar:
-- 100% of expected reds present (missing red = build failure)
-- >= 80% of expected yellows present
-- Zero flags on explicit calibration traps
+- every expected red is present; a missing red exits non-zero
+- at least 80% of expected yellows are present
+- the cross-dataset assertion holds: lithium is hard/exclusionary in the Oregon
+  dataset and non-hard/resolvable in the Colorado one
+
+Calibration traps are parsed from each oracle and reported, but not yet
+asserted on, so over-flagging a trap does not fail a run.
 
 Usage: pixi run eval [data_dir]
 """

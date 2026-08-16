@@ -403,7 +403,7 @@ Matches design. Stored in `followups` table.
 
 | # | Guardrail | Status |
 |---|---|---|
-| 1 | Rules engine sole authority for hard criteria | Implemented |
+| 1 | Rules engine sole authority for hard criteria | Partial: the engine matches hard criteria independently of the model and its flags cannot be deleted or softened by model output, but the flag schema also lets a model pass set `hard_flag`, so it is not the sole source of hard flags |
 | 2 | Profile must be approved before analysis | Implemented |
 | 3 | No admit/deny language | Enforced in prompts; no post-processing strip |
 | 4 | Conservative merge: highest level wins | Implemented in `_merge_and_dedupe()` |
