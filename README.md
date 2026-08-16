@@ -2,11 +2,11 @@
 
 A prototype for thinking through what a participant safety screening assistant could look like if an LLM helped a human reviewer without ever deciding anything. Built with HoloViz Panel and panel-material-ui, running local inference through Ollama.
 
-Screening participants for a demanding program is high-stakes, context-dependent work, and it is exactly the kind of task where an LLM is both genuinely useful and genuinely dangerous. Useful, because a model can notice a psychiatric history disclosed in a narrative three pages after the applicant answered "No" to the direct question. Dangerous, because the same model will confidently apply the wrong jurisdiction's rule, or talk itself out of a contraindication the applicant framed sympathetically.
+An LLM is useful here because it can notice a psychiatric history disclosed in a narrative three pages after the applicant answered "No" to the direct question. It is dangerous here because the same model will confidently apply the wrong jurisdiction's rule, or talk itself out of a contraindication the applicant framed sympathetically.
 
-So the question this repo works through is not "can a model screen applicants." It is: **which parts of the job can a machine hold, which parts must stay with the person, and how do you build the seam between them so the reviewer can tell what they're looking at?** The answers it tries out:
+**Which parts of this job can a machine hold, which parts must stay with the person, and how do you build the seam between them so the reviewer can tell what they are looking at?** The answers this repo tries out:
 
-- **Criteria live in documents, not code or model weights.** A program's own screening criteria are read and turned into a structured profile that a human inspects and approves before any screening runs. The reviewer signs off on the interpretation, not just the output.
+- **Criteria live in documents, not code or model weights.** A program's own screening criteria are read and turned into a structured profile that a human inspects and approves before any screening runs. The reviewer signs off on the interpretation as well as the output.
 - **Anything statable is stated, and matched deterministically.** A rules engine fires on explicit keywords, medications, and checklist fields, so those matches don't depend on temperature or phrasing. The model layers on top for what keyword matching cannot reach.
 - **The model can add, never subtract.** Model output cannot delete a deterministic flag, downgrade its severity, or attach a resolution pathway to an exclusion. Consolidating flags can raise severity and never lowers it.
 - **Every flag shows its provenance and basis**, so a reviewer sees whether a flag came from a rule or a model, and whether "cannot proceed" is law or house policy. Calibrating trust requires knowing which is which.
@@ -25,7 +25,7 @@ The load-bearing test case is a fact that resolves in opposite directions: "this
 - The screening criteria documents paraphrase OAR 333-333 and 4 CCR 755-1 as an exercise. They are not accurate legal summaries, both states are still amending their rules, and nothing here substitutes for counsel.
 - Not for use in any eligibility, screening, hiring, admission, or clinical decision about any person.
 
-Published as a design study: the artifact worth reading is the seam between the deterministic layer, the model, and the reviewer, along with the demo datasets and prompts that pin it down. It is not a product, not a starting point for one, and not something to run against anyone's data.
+Published as a design study. What it contains is the seam between the deterministic layer, the model, and the reviewer, plus the demo datasets and prompts that pin that seam down. Treat it as something to read, not to deploy or build on.
 
 Known gaps are in [IMPLEMENTATION.md](IMPLEMENTATION.md#known-gaps).
 
@@ -33,7 +33,7 @@ Known gaps are in [IMPLEMENTATION.md](IMPLEMENTATION.md#known-gaps).
 
 ![The Review tab: an applicant list, one applicant's flags, and an expanded flag card showing its level, provenance, criterion, evidence quotes and follow-up questions](docs/screenshot-review.png)
 
-The Review tab, with a fabricated applicant from the Oregon demo dataset. The expanded flag card is the part that matters: `RED` for level, `rule` for provenance so the reviewer knows this one came from deterministic matching rather than the model, `medical` for category, and `H-6` for the criterion that fired. Under the rationale, every claim is anchored to a verbatim quote from the form with the section it came from, because a reviewer cannot check a flag they cannot trace. Suggested lookups and follow-up questions are proposals for the reviewer, not actions the system takes.
+The Review tab, with a fabricated applicant from the Oregon demo dataset. On the expanded flag card, `RED` is the level, `rule` is the provenance so the reviewer knows this one came from deterministic matching rather than the model, `medical` is the category, and `H-6` is the criterion that fired. Under the rationale, every claim is anchored to a verbatim quote from the form with the section it came from, because a reviewer cannot check a flag they cannot trace. Suggested lookups and follow-up questions are proposals for the reviewer, not actions the system takes.
 
 The left rail is a flag minimap grouped by severity, so a long form does not bury a red. The applicant list carries review state, flag counts, and how many flags have been acknowledged. Nothing anywhere emits an accept or reject.
 
