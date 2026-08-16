@@ -49,7 +49,7 @@ A tool that handles this category of information for real needs all of that, plu
 
 The tradeoff is capability: a 30B local model is less capable than frontier cloud models. The deterministic rules engine absorbs some of that gap, since the model doesn't need to catch lithium when the keyword matcher already did.
 
-The full intake form plus all screening criteria fits comfortably in the 16k context window used for the comprehensive pass (~7k tokens total input), so no context-window trade-offs are needed despite running locally. The 30B model's physical 262k limit is far above what's required.
+The full intake form plus all screening criteria fits in the 16k context window configured for the comprehensive pass, at roughly 7k tokens of input, so running locally does not force a context trade-off.
 
 ---
 
@@ -63,7 +63,9 @@ Every criterion in the profile carries a `DetectionSpec` with explicit keywords,
 - Produces identical results across runs
 - Fires independently of the model: if `lithium` is in the profile's keyword list and the parser found it in the medication table, R-A1 fires whatever the model concludes
 
-What it does not do is guarantee recall. Its coverage is only as good as four things upstream of it: the profile builder emitting the right keywords for each criterion, the section map resolving the form's headings, the parser having captured the field at all, and the applicant's spelling matching. A form that says `Lithobid` or `Li carbonate` is a test of `DRUG_CLASS_MAP`, not a certainty. Treat this layer as the floor on model variance, not as a safety net.
+What it does not do is guarantee recall. Its coverage is only as good as three things upstream of it: the profile builder emitting the right keywords for each criterion, the parser having captured the field at all, and the applicant's spelling matching. A form that says `Lithobid` or `Li carbonate` is a test of `DRUG_CLASS_MAP`, not a certainty. Treat this layer as the floor on model variance, not as a safety net.
+
+Section targeting used to be a fourth dependency, and a load-bearing one: Oregon's lithium question sits in the regulatory screening block rather than the medication list, so a criterion aimed at `medications` found nothing on a form that answered "Yes". A hard criterion that matches nothing in the sections it targets now rescans the rest of the form and names the section it matched in the flag's rationale. Caution criteria keep the narrow scope, since widening every criterion would bury the reviewer in matches from unrelated sections.
 
 ### Layer 2: Per-section model analysis
 The model reads each section against the relevant criteria and produces supplementary flags. It catches things the rules engine cannot: contradictions between a form answer and a narrative disclosure, spiritual reframing of psychotic episodes, implications of medication combinations, timeline inferences. But these flags are:
@@ -71,7 +73,7 @@ The model reads each section against the relevant criteria and produces suppleme
 - Attributed to "model" provenance so the reviewer knows the confidence level
 - Backed by verbatim quotes (the prompt enforces this)
 
-### Layer 2.5: Comprehensive whole-form pass
+### Layer 3: Comprehensive whole-form pass
 After individual section analysis, the entire intake form and all screening criteria are sent in a single model call. This addresses a fundamental limitation of per-section analysis: some concerns only emerge when the full form is visible at once. A medication in one section that maps to a criterion tested in a different section; a "No" on a regulatory screening question contradicted by a disclosure three pages later; a timeline that only makes sense when multiple dated references are combined. The per-section pass can't see these because it only receives one section at a time. The comprehensive pass sees everything the human reviewer would see when reading the form front to back.
 
 The temperature is slightly elevated (0.2 vs 0.1 for per-section) because its job requires more inference: connecting information across sections rather than matching keywords in a single answer.
@@ -118,7 +120,7 @@ Facilitators need to know whether a flag represents a legal obligation or a poli
 - A **regulatory** flag ("Oregon law says this person cannot participate") leaves no discretion; the facilitator cannot override it on clinical judgment.
 - A **house** flag ("our policy declines this pending consulting-clinician review") allows the center to make exceptions through their own processes.
 
-PISA carries `basis` (regulatory/house) and `citation` (rule reference) on every criterion and flag. The UI renders these as distinct chip styles so a reviewer sees the distinction at a glance without reading the full rationale.
+PISA carries `basis` (regulatory/house) and `citation` (rule reference) on every criterion and flag, and the UI renders them as distinct chip styles so a reviewer sees the distinction without reading the full rationale. A flag written before these fields were persisted shows no chip until its applicant is screened again.
 
 ---
 

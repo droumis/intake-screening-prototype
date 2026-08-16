@@ -65,7 +65,7 @@ pixi.toml                # Environment and tasks
 | Principle | Status |
 |---|---|
 | 1. Safety first (escalate uncertainty) | Implemented: conservatism rules in merge/dedupe, rules engine matches hard criteria independently of the model. Recall is bounded by the profile's keyword lists, so this is not a completeness claim. |
-| 2. Human decides (no decision language) | Implemented: enforced in all three prompt templates, no admit/deny logic in code |
+| 2. Human decides (no decision language) | Implemented: enforced in all four v1.1.0 prompt templates, no admit/deny logic in code |
 | 3. Deterministic where it matters | Implemented: rules engine is pure-function keyword/checklist matching with unit tests |
 | 4. Local inference | Implemented: SQLite and Ollama, no network calls beyond localhost. Not a privacy architecture: no auth, no encryption at rest, no audit of reads, no retention policy. |
 | 5. Domain agnosticism | Implemented: 4 demo programs with different criteria and no hardcoded rules |
@@ -278,9 +278,9 @@ The implementation uses **`panel-material-ui` (pmui)** with `pmui.Page`:
 
 ```python
 page = pmui.Page(
-    title="PISA — Participant Intake Screening Assistant",
-    sidebar=[...],
-    main=[pmui.Tabs(("Setup", ...), ("Review", ...))],
+    title="PISA",
+    sidebar=sidebar_content,
+    main=[main_tabs, footer_html],   # footer carries the scope warning
     theme_config=THEME,
 )
 ```
