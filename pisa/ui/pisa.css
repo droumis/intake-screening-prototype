@@ -1,0 +1,198 @@
+/* PISA theme overrides — design tokens and contrast fixes */
+
+:root {
+    --pisa-primary: #33628C;
+    --pisa-surface: #FAFAF8;
+    --pisa-text-primary: #1F2933;
+    --pisa-text-secondary: #5F6B76;
+    --pisa-muted: #8A939B;
+    --pisa-level-red: #B4453A;
+    --pisa-level-amber: #C07A1F;
+    --pisa-level-green: #3E7D4F;
+    --pisa-card-border: #E5E3DE;
+    --pisa-divider: #E5E3DE;
+}
+
+/* §7.4 — Fast tooltips (10ms, not 500ms native title) */
+.pisa-tip {
+    position: relative;
+}
+.pisa-tip[data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--pisa-text-primary);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    white-space: nowrap;
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 1000;
+    pointer-events: none;
+    animation: pisa-tip-in 0.08s ease-out;
+}
+@keyframes pisa-tip-in {
+    from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Fix alert contrast: dark text on tinted backgrounds (WCAG AA) */
+.alert {
+    color: var(--pisa-text-primary) !important;
+}
+.alert-success { background-color: #d4edda !important; border-color: #c3e6cb !important; color: #155724 !important; }
+.alert-info { background-color: #d1ecf1 !important; border-color: #bee5eb !important; color: #0c5460 !important; }
+.alert-warning { background-color: #fff3cd !important; border-color: #ffeeba !important; color: #856404 !important; }
+.alert-danger { background-color: #f8d7da !important; border-color: #f5c6cb !important; color: #721c24 !important; }
+
+/* Content max-width centered */
+.bk-Column {
+    max-width: 1280px;
+}
+
+/* Typography: cap text blocks at ~75ch */
+.bk-Markdown p,
+.bk-Markdown li {
+    max-width: 75ch;
+}
+
+/* Spacing: 8px grid */
+.bk-Column > .bk-panel-models-layout-Column,
+.bk-Column > .bk-Row {
+    margin-bottom: 8px;
+}
+
+/* Sticky header for detail view */
+.pisa-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: inherit;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--pisa-card-border);
+}
+
+/* Criterion badge: monospace chip */
+.pisa-criterion-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    background: #E8E6E1;
+    color: var(--pisa-text-primary);
+    margin: 0 2px;
+    vertical-align: middle;
+}
+
+/* Suggested lookup chips */
+.pisa-lookup-chip {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    background: #F0EFEB;
+    color: var(--pisa-text-secondary);
+    margin: 2px 4px 2px 0;
+}
+
+/* Resolution criteria box */
+.pisa-resolution-box {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #F7F6F3;
+    border-left: 3px solid var(--pisa-level-amber);
+    font-size: 13px;
+    color: var(--pisa-text-primary);
+    margin: 8px 0;
+}
+
+/* §7.7 — Provenance chips */
+.pisa-provenance {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 500;
+    vertical-align: middle;
+    margin: 0 2px;
+}
+.pisa-provenance--rule {
+    background: var(--pisa-level-green);
+    color: #fff;
+}
+.pisa-provenance--model {
+    background: transparent;
+    border: 1px solid var(--pisa-muted);
+    color: var(--pisa-text-secondary);
+}
+.pisa-provenance--reviewer {
+    background: transparent;
+    border: 1px solid var(--pisa-primary);
+    color: var(--pisa-primary);
+}
+
+/* §7.8 — Scroll-capped containers */
+.pisa-scroll-cap {
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+/* §7.5 — Eyebrow labels (applied via inline style, class for override) */
+.pisa-eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--pisa-muted);
+    margin-bottom: 4px;
+}
+
+/* Minimap row */
+.pisa-minimap-row {
+    font-size: 12px;
+    padding: 3px 0;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.pisa-minimap-row--resolved {
+    opacity: 0.55;
+}
+
+/* Tabulator: ensure selected row text is readable in both light and dark modes */
+.pn-tabulator .tabulator .tabulator-row.tabulator-selected,
+.pn-tabulator .tabulator .tabulator-row.tabulator-selected .tabulator-cell,
+.tabulator-row.tabulator-selected,
+.tabulator-row.tabulator-selected .tabulator-cell {
+    color: #1F2933 !important;
+}
+
+/* Compact page footer */
+.pisa-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 4px 16px;
+    font-size: 11px;
+    color: var(--pisa-muted);
+    background: var(--pisa-surface);
+    border-top: 1px solid var(--pisa-divider);
+    z-index: 5;
+    /* Right-aligned rather than centered: the bar spans the full window width,
+       so centered text starts underneath the sidebar drawer and the scope
+       warning gets clipped. Right alignment keeps it legible at any width. */
+    text-align: right;
+    padding-right: 24px;
+}
